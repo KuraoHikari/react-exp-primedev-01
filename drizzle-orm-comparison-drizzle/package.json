@@ -1,31 +1,35 @@
 {
-  "name": "express-prisma-typescript",
-  "version": "1.0.0",
-  "description": "A simple CRUD API using Express and Prisma in TypeScript",
-  "main": "src/index.ts",
-  "scripts": {
-    "dev": "tsx src/index.ts",
-    "start": "ts-node ./src/index.ts",
-    "start:prod": "npm run build && node ./dist/src/index.js",
-    "start:nodemon": "./node_modules/nodemon/bin/nodemon.js",
-    "build": "npx tsc"
-  },
-  "dependencies": {
-    "@neondatabase/serverless": "^0.6.0",
-    "bcrypt": "^5.1.1",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "drizzle-orm": "^0.28.6",
-    "express": "^4.17.3",
-    "pg": "^8.11.3"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.13",
-    "@types/node": "^18.15.11",
-    "drizzle-kit": "^0.19.13",
-    "nodemon": "^3.0.1",
-    "ts-node": "^10.9.1",
-    "tsx": "^3.12.6",
-    "typescript": "^5.2.2"
-  }
+ "name": "express-prisma-typescript",
+ "version": "1.0.0",
+ "description": "A simple CRUD API using Express and Prisma in TypeScript",
+ "main": "src/index.ts",
+ "scripts": {
+  "dev": "tsx src/index.ts",
+  "start": "ts-node ./src/index.ts",
+  "start:prod": "npm run build && node ./dist/src/index.js",
+  "start:nodemon": "./node_modules/nodemon/bin/nodemon.js",
+  "build": "npx tsc"
+ },
+ "dependencies": {
+  "@neondatabase/serverless": "^0.6.0",
+  "bcrypt": "^5.1.1",
+  "cors": "^2.8.5",
+  "dotenv": "^16.0.3",
+  "drizzle-orm": "^0.28.6",
+  "express": "^4.17.3",
+  "express-validator": "^7.0.1",
+  "jsonwebtoken": "^9.0.2",
+  "pg": "^8.11.3"
+ },
+ "devDependencies": {
+  "@types/bcrypt": "^5.0.0",
+  "@types/express": "^4.17.13",
+  "@types/jsonwebtoken": "^9.0.2",
+  "@types/node": "^18.15.11",
+  "drizzle-kit": "^0.19.13",
+  "nodemon": "^3.0.1",
+  "ts-node": "^10.9.1",
+  "tsx": "^3.12.6",
+  "typescript": "^5.2.2"
+ }
 }
