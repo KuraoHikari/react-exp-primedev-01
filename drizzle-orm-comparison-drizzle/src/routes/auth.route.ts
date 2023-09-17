@@ -6,11 +6,15 @@ import ExpressValidator from "../middlewares/validator/express.validator";
 export const authRoutes = Router();
 
 authRoutes.post(
- "/register",
- ExpressValidator.validate(AuthSchemaValidator.registerUser()),
- AuthController.registerUser
+  "/register",
+  ExpressValidator.validate(AuthSchemaValidator.registerUser()),
+  AuthController.registerUser
 );
 
-authRoutes.post("/login", ExpressValidator.validate(AuthSchemaValidator.loginUser()), AuthController.loginUser);
+authRoutes.post(
+  "/login",
+  ExpressValidator.validate(AuthSchemaValidator.loginUser()),
+  AuthController.loginUser
+);
 
 export default authRoutes;
