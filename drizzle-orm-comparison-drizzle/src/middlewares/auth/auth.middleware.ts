@@ -5,6 +5,11 @@ import Jwt from "../../libs/jwt";
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
  const auth = req.headers.authorization;
+ //  console.log(
+ //   "🚀 ~ file: auth.middleware.ts:8 ~ authMiddleware ~ req.headers.authorization:",
+ //   req.headers.authorization
+ //  );
+
  if (auth && auth.startsWith("Bearer")) {
   const token = auth.slice(7);
 
