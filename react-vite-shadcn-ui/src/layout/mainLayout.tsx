@@ -38,6 +38,11 @@ const LayoutMain = () => {
     </Container>
    </div>
    <Outlet />
+   <footer className="footer footer-center  w-full py-5 text-gray-500">
+    <div className="text-center">
+     <p>Copyright © 2023 - Kurao Hikari</p>
+    </div>
+   </footer>
   </>
  );
 };

@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import LayoutMain from "./layout/mainLayout";
+import AnimePage from "./pages/animePage";
 
 export const routes = [
  {
@@ -9,7 +10,7 @@ export const routes = [
   children: [
    {
     index: true,
-    element: <>main anime</>,
+    element: <AnimePage />,
    },
    {
     path: ":id",
