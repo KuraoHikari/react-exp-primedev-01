@@ -7,7 +7,7 @@ const AnimePage = () => {
  const animeDataExample = DataAnimeExample;
  return (
   <>
-   <div className="p-4 sm:p-6 lg:p-8 rounded-xl overflow-hidden">
+   <div className="px-4 sm:px-6 lg:px-8 rounded-xl overflow-hidden">
     <div
      style={{ backgroundImage: `url(/anime-bg.jpg)` }}
      className="relative aspect-[2/1] md:aspect-[2.4/1] overflow-hidden bg-cover"
