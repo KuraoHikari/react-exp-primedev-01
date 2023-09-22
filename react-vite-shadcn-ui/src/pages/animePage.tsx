@@ -22,7 +22,7 @@ const AnimePage = () => {
      </div>
     </div>
    </div>
-   <MegaTextTitle text1="THE" text2=" ANI" text3="ME SE" text4="ARCH" />
+   <MegaTextTitle className="text-center" text1="THE" text2=" ANI" text3="ME SE" text4="ARCH" />
    <SearchBar />
    <div className="md:mx-5 grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-3 md:grid-cols-4 grid-cols-1">
     {animeDataExample.map((anime) => (
