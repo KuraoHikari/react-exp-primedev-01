@@ -1,15 +1,23 @@
+import baseApi from "@/api/baseApi";
 import AuthForm from "@/components/AuthForm";
 import { MegaTextTitle } from "@/components/MegaTextTitle";
 
 import { GithubIcon } from "lucide-react";
 import { Link, redirect } from "react-router-dom";
 
-// @ts-ignore
-export async function action({ request }) {
+export async function action({ request }: { request: Request }) {
  const formData = await request.formData();
  const payload = Object.fromEntries(formData);
 
- console.log("🚀 ~ file: authLayout.tsx:12 ~ action ~ payload:", payload, request);
+ const response = await baseApi.post(`auth/${payload.auth}`, {
+  headers: {
+   "Content-Type": "application/json",
+  },
+  body: JSON.stringify(payload),
+ });
+
+ const json = await response.json();
+ console.log(json);
 
  return redirect("/anime");
 }

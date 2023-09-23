@@ -20,8 +20,7 @@ const AuthForm = () => {
 
  const submit = useSubmit();
 
- // @ts-ignore
- function handleSubmit(event) {
+ function handleSubmit(event: any) {
   event.preventDefault();
 
   submit(event.currentTarget);
@@ -64,7 +63,7 @@ const AuthForm = () => {
       placeholder="Password"
      />
     </div>
-    <Input className="hidden" type="text" name="auth" id="auth" value={variant === "LOGIN" ? "LOGIN" : "REGISTER"} />
+    <Input className="hidden" type="text" name="auth" id="auth" value={variant === "LOGIN" ? "login" : "register"} />
 
     <div className="pb-2 pt-4">
      <Button

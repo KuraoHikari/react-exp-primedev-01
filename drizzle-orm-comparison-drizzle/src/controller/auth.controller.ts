@@ -66,7 +66,7 @@ class AuthController {
       ])
      );
     } else {
-     const access_token = Jwt.jwtSign({ email: user.email, id: user.id });
+     const access_token = await Jwt.jwtSign({ email: user.email, id: user.id });
 
      return sendResponse(res, SuccessCode.OK, {
       access_token,

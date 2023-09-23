@@ -31,7 +31,7 @@ export const routes = [
 const router = createBrowserRouter([
  ...routes,
  {
-  path: "auth",
+  path: "/auth",
   element: <AuthLayout />,
   action: actionAuth,
  },

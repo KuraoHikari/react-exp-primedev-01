@@ -21,7 +21,7 @@ export const sendResponse = (res: Response, status: string, metadata?: any) => {
  }
 
  return res.status(code).json({
-  statusCode: status,
+  status: code,
   name: status,
   metadata: metadata,
  });

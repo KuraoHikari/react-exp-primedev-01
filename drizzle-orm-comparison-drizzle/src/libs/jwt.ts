@@ -11,19 +11,19 @@ if (process.env.NODE_ENV !== "production") {
 const jwtKey = process.env.JWT_SECRET || "keyyy";
 
 class Jwt {
- static jwtSign(payload: { id: number; email: string }) {
+ static async jwtSign(payload: { id: number; email: string }) {
   return jwt.sign(payload, jwtKey, {
    expiresIn: "2h",
   });
  }
- static verifyToken = (token: string): { _id: string; email: string } => {
+ static verifyToken(token: string) {
   try {
    const tokenData = jwt.verify(token, jwtKey);
    return tokenData as { _id: string; email: string };
   } catch (error) {
    throw new ErrorException(ErrorCode.Unauthenticated);
   }
- };
+ }
 }
 
 export default Jwt;
