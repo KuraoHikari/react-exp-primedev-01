@@ -23,7 +23,7 @@ export const sendResponse = (res: Response, status: string, metadata?: any) => {
  return res.status(code).json({
   status: code,
   name: status,
-  metadata: metadata,
+  metaData: metadata,
  });
 };
 

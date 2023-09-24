@@ -47,16 +47,28 @@ const AuthForm = () => {
    >
     {variant === "LOGIN" ? null : (
      <div className="pb-2 pt-4">
-      <Input type="name" name="name" id="name" placeholder="Name" className="block w-full text-lg  bg-black" />
+      <Input
+       type="name"
+       name="name"
+       id="name"
+       placeholder="Name"
+       className="flex h-10 w-full border border-input bg-background px-3 py-6 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  bg-black"
+      />
      </div>
     )}
 
     <div className="pb-2 pt-4">
-     <Input type="email" name="email" id="email" placeholder="Email" className="block w-full text-lg  bg-black" />
+     <Input
+      type="email"
+      name="email"
+      id="email"
+      placeholder="Email"
+      className="flex h-10 w-full border border-input bg-background px-3 py-6 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  bg-black"
+     />
     </div>
     <div className="pb-2 pt-4">
      <Input
-      className="block w-full text-lg bg-black"
+      className="flex h-10 w-full border border-input bg-background px-3 py-6 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-black"
       type="password"
       name="password"
       id="password"

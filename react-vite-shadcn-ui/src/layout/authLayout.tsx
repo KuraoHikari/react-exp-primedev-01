@@ -1,25 +1,43 @@
 import baseApi from "@/api/baseApi";
 import AuthForm from "@/components/AuthForm";
 import { MegaTextTitle } from "@/components/MegaTextTitle";
+import { responseAuthApi } from "@/types/responseType";
 
 import { GithubIcon } from "lucide-react";
 import { Link, redirect } from "react-router-dom";
 
+export async function loader() {
+ if (localStorage.getItem("access_token")) {
+  return redirect("/anime");
+ }
+ return {};
+}
+
 export async function action({ request }: { request: Request }) {
- const formData = await request.formData();
- const payload = Object.fromEntries(formData);
+ try {
+  const formData = await request.formData();
+  const payload = Object.fromEntries(formData);
 
- const response = await baseApi.post(`auth/${payload.auth}`, {
-  headers: {
-   "Content-Type": "application/json",
-  },
-  body: JSON.stringify(payload),
- });
+  const response = await baseApi.post(`auth/${payload.auth}`, {
+   headers: {
+    "Content-Type": "application/json",
+   },
+   body: JSON.stringify(payload),
+  });
 
- const json = await response.json();
- console.log(json);
+  if (!response.ok) {
+   console.log(response);
+  }
 
- return redirect("/anime");
+  const json: responseAuthApi = (await response.json()) || {};
+
+  localStorage.setItem("access_token", String(json.metaData.access_token));
+
+  return redirect("/anime");
+ } catch (error) {
+  //   console.log(error);
+  return redirect("/auth");
+ }
 }
 
 const AuthLayout = () => {

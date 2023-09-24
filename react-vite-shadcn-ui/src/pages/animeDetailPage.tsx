@@ -1,10 +1,30 @@
+import baseJikanApi from "@/api/jikanApi";
 import { Button } from "@/components/ui/button";
-import DataAnimeExample from "@/dataAnimeExample";
 import DataAnimeImageExample from "@/dataAnimeImageEx";
+import { animeDetailRes } from "@/types/responseType";
 import clsx from "clsx";
+import { useLoaderData } from "react-router-dom";
+
+interface Params {
+ id: string;
+}
+
+export async function loader({ params }: any) {
+ const typeParams = params as unknown as Params;
+ const response = await baseJikanApi.get(`anime/${typeParams.id}`);
+
+ if (!response.ok) {
+  console.log(response);
+ }
+
+ const json: { data: animeDetailRes } = await response.json();
+
+ return { anime: json.data };
+}
 
 const PageDetailAnime = () => {
- const anime = DataAnimeExample[0];
+ const data = useLoaderData() as { anime: animeDetailRes };
+
  const animeImage = DataAnimeImageExample;
  return (
   <>
@@ -15,15 +35,15 @@ const PageDetailAnime = () => {
        className="text-center mb-4  
         font-bold text-3xl sm:text-5xl lg:text-6xl "
       >
-       <h1>{anime?.title}</h1>
+       <h1>{data?.anime?.title}</h1>
       </div>
       <div className="flex justify-center">
        <div className="md:w-1/4 md:me-10">
         <img
          width={215}
          height={316}
-         src={anime?.images?.webp?.image_url}
-         alt={anime?.title}
+         src={data?.anime?.images?.webp?.image_url}
+         alt={data?.anime?.title}
          className={clsx("dark:border-gray-200 border-gray-900 border-2 h-[300px] mx-auto")}
         />
         <div className="text-center my-2">
@@ -32,19 +52,19 @@ const PageDetailAnime = () => {
          </Button>
 
          <p className="text-center text-gray-500 text-sm capitalize my-2">
-          {anime?.aired?.string} {anime?.season}
+          {data?.anime?.aired?.string} {data?.anime?.season}
          </p>
          <div className="text-sm text-left text-gray-500 hidden md:block lg:hidden">
           <h4 className="text-gray-900 font-bold"> Information:</h4>
-          <p>Type: {anime?.type}</p>
-          <p>Episodes: {anime?.episodes}</p>
-          <p>Status: {anime?.status}</p>
-          <p>Aired: {anime?.aired?.string}</p>
+          <p>Type: {data?.anime?.type}</p>
+          <p>Episodes: {data?.anime?.episodes}</p>
+          <p>Status: {data?.anime?.status}</p>
+          <p>Aired: {data?.anime?.aired?.string}</p>
 
-          <p>Broadcast: {anime?.broadcast?.string}</p>
-          <p>Rating: {anime?.rating}</p>
+          <p>Broadcast: {data?.anime?.broadcast?.string}</p>
+          <p>Rating: {data?.anime?.rating}</p>
 
-          <p>Source: {anime?.source}</p>
+          <p>Source: {data?.anime?.source}</p>
          </div>
         </div>
        </div>
@@ -52,20 +72,20 @@ const PageDetailAnime = () => {
        <div className="w-3/4 hidden md:block">
         <div className="text-sm text-left text-gray-500 hidden lg:block">
          <h4 className="text-gray-900 font-bold"> Information:</h4>
-         <p>Type: {anime?.type}</p>
-         <p>Episodes: {anime?.episodes}</p>
-         <p>Status: {anime?.status}</p>
-         <p>Aired: {anime?.aired?.string}</p>
+         <p>Type: {data?.anime?.type}</p>
+         <p>Episodes: {data?.anime?.episodes}</p>
+         <p>Status: {data?.anime?.status}</p>
+         <p>Aired: {data?.anime?.aired?.string}</p>
 
-         <p>Broadcast: {anime?.broadcast?.string}</p>
-         <p>Rating: {anime?.rating}</p>
+         <p>Broadcast: {data?.anime?.broadcast?.string}</p>
+         <p>Rating: {data?.anime?.rating}</p>
 
-         <p>Source: {anime?.source}</p>
+         <p>Source: {data?.anime?.source}</p>
         </div>
         <h4 className="text-gray-900 font-bold">Synopsis:</h4>
-        <p className="text-gray-700">{anime?.synopsis}</p>
+        <p className="text-gray-700">{data?.anime?.synopsis}</p>
         <h4 className="text-gray-900 font-bold">Background:</h4>
-        <p className="text-gray-700">{anime?.background}</p>
+        <p className="text-gray-700">{data?.anime?.background}</p>
        </div>
       </div>
      </div>

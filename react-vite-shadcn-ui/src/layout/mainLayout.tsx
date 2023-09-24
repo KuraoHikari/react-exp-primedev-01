@@ -1,10 +1,16 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, redirect, useLocation } from "react-router-dom";
 import Container from "@/components/ui/container";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/mode-toggle";
 import { routes } from "@/route";
 
-export type RouteType = "anime" | "bookmark" | "";
+export async function loader() {
+ if (localStorage.getItem("access_token")) {
+  return redirect("/auth");
+ }
+
+ return {};
+}
 
 const LayoutMain = () => {
  const location = useLocation();

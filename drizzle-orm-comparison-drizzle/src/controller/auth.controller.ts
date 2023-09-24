@@ -17,8 +17,9 @@ class AuthController {
     .insert(userSchema)
     .values([{ name, email, password: hashPassword }])
     .returning();
+   console.log("🚀 ~ file: auth.controller.ts:20 ~ AuthController ~ registerUser ~ user:", user);
 
-   const access_token = Jwt.jwtSign({
+   const access_token = await Jwt.jwtSign({
     email: user[0].email,
     id: user[0].id,
    });
