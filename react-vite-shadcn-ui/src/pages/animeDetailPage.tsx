@@ -1,9 +1,10 @@
+import baseApi from "@/api/baseApi";
 import baseJikanApi from "@/api/jikanApi";
 import { Button } from "@/components/ui/button";
-import DataAnimeImageExample from "@/dataAnimeImageEx";
-import { animeDetailRes } from "@/types/responseType";
+import { Input } from "@/components/ui/input";
+import { animeDetailRes, responseAnimeImages } from "@/types/responseType";
 import clsx from "clsx";
-import { useLoaderData } from "react-router-dom";
+import { redirect, useLoaderData, useSubmit } from "react-router-dom";
 
 interface Params {
  id: string;
@@ -19,13 +20,45 @@ export async function loader({ params }: any) {
 
  const json: { data: animeDetailRes } = await response.json();
 
- return { anime: json.data };
+ const responseImages = await baseApi.get(`animewall?title=${json.data.title}`, {
+  headers: {
+   authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  },
+ });
+
+ const jsonImages: responseAnimeImages = await responseImages.json();
+
+ return { anime: json.data, animeImages: jsonImages.metaData };
+}
+
+export async function action({ request, params }: { request: Request; params: any }) {
+ const formData = await request.formData();
+ const payload = Object.fromEntries(formData);
+
+ const response = await baseApi.post(`bookmark/${params.id}`, {
+  headers: {
+   "Content-Type": "application/json",
+   authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  },
+  body: JSON.stringify(payload),
+ });
+ console.log("🚀 ~ file: animeDetailPage.tsx:47 ~ action ~ response:", response);
+
+ if (!response.ok) {
+  console.log(response);
+ }
+
+ return redirect("/bookmark");
 }
 
 const PageDetailAnime = () => {
- const data = useLoaderData() as { anime: animeDetailRes };
+ const data = useLoaderData() as { anime: animeDetailRes; animeImages: { image: string }[] };
+ const submit = useSubmit();
+ function handleSubmit(event: any) {
+  event.preventDefault();
 
- const animeImage = DataAnimeImageExample;
+  submit(event.currentTarget);
+ }
  return (
   <>
    <div className="overflow-hidden">
@@ -47,9 +80,31 @@ const PageDetailAnime = () => {
          className={clsx("dark:border-gray-200 border-gray-900 border-2 h-[300px] mx-auto")}
         />
         <div className="text-center my-2">
-         <Button className=" px-4 font-semibold text-gray-100 bg-gray-900 hover:bg-gray-200 hover:text-gray-900">
-          Add to Bookmark
-         </Button>
+         <form
+          method="post"
+          onSubmit={(event) => {
+           handleSubmit(event);
+          }}
+         >
+          <Input className="hidden" type="text" name="season" id="season" defaultValue={data?.anime?.season} />
+          <Input className="hidden" type="text" name="aired" id="aired" defaultValue={data?.anime?.aired?.string} />
+          <Input className="hidden" type="text" name="desc" id="desc" defaultValue={data?.anime?.synopsis} />
+          <Input className="hidden" type="text" name="title" id="title" defaultValue={data?.anime?.title} />
+          <Input className="hidden" type="text" name="malUrl" id="malUrl" defaultValue={data?.anime?.url} />
+          <Input
+           className="hidden"
+           type="text"
+           name="imageUrl"
+           id="imageUrl"
+           defaultValue={data?.anime?.images?.webp?.image_url}
+          />
+          <Button
+           type="submit"
+           className=" px-4 font-semibold text-gray-100 bg-gray-900 hover:bg-gray-200 hover:text-gray-900"
+          >
+           Add to Bookmark
+          </Button>
+         </form>
 
          <p className="text-center text-gray-500 text-sm capitalize my-2">
           {data?.anime?.aired?.string} {data?.anime?.season}
@@ -91,25 +146,11 @@ const PageDetailAnime = () => {
      </div>
     </div>
 
-    <div
-     className="
-            flex flex-col items-center justify-between min-h-screen
-         "
-    >
+    <div className="flex flex-col items-center justify-between min-h-screen">
      <div className="wrapper pt-10">
       <div className="box-border max-w-7xl mx-4 sm:columns-1 md:columns-2 lg:columns-3 xl:columns-3">
-       {animeImage.map((animeI) => (
-        <div
-         className="
-                    break-inside
-                    bg-clip-border
-                  bg-white
-                    flex 
-                    flex-col 
-                    mb-4 
-                    p-6 
-                  "
-        >
+       {data?.animeImages?.map((animeI) => (
+        <div key={animeI.image} className="break-inside bg-clip-border bg-white flex flex-col mb-4 p-6">
          <div className="flex items-center justify-center">
           <img className="max-w-full " alt="Avatar" src={animeI.image} loading="lazy" />
          </div>

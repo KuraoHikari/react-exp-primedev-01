@@ -6,6 +6,48 @@ export type responseAuthApi = {
  };
 };
 
+export interface IAnime {
+ mal_id: number;
+ images: {
+  webp: {
+   image_url: string;
+  };
+ };
+ title: string;
+ year: number;
+ season: string;
+ aired: {
+  string: string;
+ };
+}
+export type animeBookmark = {
+ id: number;
+ imageUrl: string;
+ malUrl: string;
+ malId: number;
+ title: string;
+ desc: string;
+ aired: string;
+ season: string;
+ userId: number;
+};
+
+export type responseBookmarks = {
+ status: number;
+ name: string;
+ metaData: animeBookmark[];
+};
+
+export type responseAnimeImages = {
+ status: number;
+ name: string;
+ metaData: {
+  title?: string;
+  thumbnail?: string;
+  image: string;
+ }[];
+};
+
 export type animeDetailRes = {
  mal_id: number;
  url: string;

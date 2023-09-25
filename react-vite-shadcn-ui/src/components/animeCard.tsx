@@ -10,10 +10,10 @@ interface AnimeCardProps {
  id: number;
 }
 
-export const AnimeCard: React.FC<AnimeCardProps> = ({ image_url, title, year, season, aired, id }) => {
+export const AnimeCard: React.FC<AnimeCardProps> = ({ image_url, title, year = 0, season, aired, id }) => {
  return (
   <div className={clsx("xl:w-72 lg:w-48  w-44 my-2", "duration-300 hover:-translate-y-1 hover:opacity-80 mx-auto")}>
-   <Link className="cursor-pointer" to={String(id)}>
+   <Link className="cursor-pointer" to={`/anime/${String(id)}`}>
     <figure>
      <img
       width={115}
@@ -38,7 +38,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ image_url, title, year, se
       </p>
 
       <small className="leading-5 text-gray-500 dark:text-gray-400">
-       <span>{year}</span> <span>{season}</span> (<span>{aired}</span>)
+       <span>{year === 0 ? "" : year}</span> <span>{season}</span> (<span>{aired}</span>)
       </small>
      </figcaption>
     </figure>

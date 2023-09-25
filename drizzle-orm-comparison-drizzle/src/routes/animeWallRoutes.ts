@@ -4,6 +4,6 @@ import AnimeWall from "../controller/animeImage.controller";
 
 export const animeWallRoutes = Router();
 
-animeWallRoutes.get("/", AnimeWall.getAnimeWallpaper);
+animeWallRoutes.get("/", authMiddleware, AnimeWall.getAnimeWallpaper);
 
 export default animeWallRoutes;
