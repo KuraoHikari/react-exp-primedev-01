@@ -2,18 +2,17 @@ import express from "express";
 import router from "./routes";
 import cors from "cors";
 import { errorHandler } from "./middlewares/error/handler.error";
-import bodyParser from "body-parser";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(
-  cors({
-    origin: "*",
-  })
+ cors({
+  origin: "https://tubular-kringle-358b8d.netlify.app",
+ })
 );
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // // Configure multer for file uploads
 // const storage = multer.memoryStorage();
@@ -26,5 +25,5 @@ app.use(router);
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log(`Server is listening on port ${port}.`);
+ console.log(`Server is listening on port ${port}.`);
 });

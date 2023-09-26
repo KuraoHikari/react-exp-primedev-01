@@ -13,7 +13,7 @@ const jwtKey = process.env.JWT_SECRET || "keyyy";
 class Jwt {
  static async jwtSign(payload: { id: number; email: string }) {
   return jwt.sign(payload, jwtKey, {
-   expiresIn: "2h",
+   expiresIn: 60,
   });
  }
  static verifyToken(token: string) {
