@@ -2,9 +2,12 @@ import express from "express";
 import router from "./routes";
 import cors from "cors";
 import { errorHandler } from "./middlewares/error/handler.error";
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
