@@ -2,14 +2,15 @@ import express from "express";
 import router from "./routes";
 import cors from "cors";
 import { errorHandler } from "./middlewares/error/handler.error";
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(
+ cors({
+  origin: String(process.env.cors),
+ })
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -24,5 +25,5 @@ app.use(router);
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log(`Server is listening on port ${port}.`);
+ console.log(`Server is listening on port ${port}.`);
 });

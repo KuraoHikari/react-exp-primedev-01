@@ -7,7 +7,7 @@ import { Loader2, LogOut } from "lucide-react";
 import { animeBookmark, responseBookmarks } from "@/types/responseType";
 import baseApi from "@/api/baseApi";
 import useBookmarksList from "@/store/useBookmarklist";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export async function loader() {
@@ -38,7 +38,17 @@ export async function loader() {
 }
 
 const LayoutMain = () => {
+ const [isLoading, setIsLoading] = useState<boolean>(false);
+
  const navigation = useNavigation();
+
+ useEffect(() => {
+  if (navigation.state === "loading") {
+   setIsLoading(true);
+  } else {
+   setIsLoading(false);
+  }
+ }, [navigation?.state]);
 
  const { set } = useBookmarksList();
  const data = useLoaderData() as { anime: animeBookmark[] };
@@ -48,7 +58,7 @@ const LayoutMain = () => {
    set(data?.anime);
   }
  }, []);
- if (navigation.state === "loading") {
+ if (isLoading) {
   return (
    <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden opacity-75 flex flex-col items-center justify-center">
     <Loader2 className="ms-2 h-10 w-10 animate-spin" />
@@ -80,19 +90,19 @@ const LayoutMain = () => {
       <nav className="mx-6 flex items-center space-x-4 lg:space-x-6">
        {routes.map((route) => (
         <Link
-         key={route.name}
-         to={`/${route.name}`}
+         key={route?.name}
+         to={`/${route?.name}`}
          className={cn(
           "capitalize text-sm font-medium transition-colors hover:text-black hover:dark:text-neutral-200",
-          location.pathname?.includes(route.name) ? "text-black dark:text-neutral-200" : "text-neutral-500"
+          location.pathname?.includes(route?.name) ? "text-black dark:text-neutral-200" : "text-neutral-500"
          )}
         >
-         {route.name}
+         {route?.name}
         </Link>
        ))}
       </nav>
       <div className="ml-auto flex items-center gap-x-4">
-       {localStorage.getItem("access_token") && (
+       {localStorage?.getItem("access_token") && (
         <form
          method="post"
          onSubmit={(event) => {
