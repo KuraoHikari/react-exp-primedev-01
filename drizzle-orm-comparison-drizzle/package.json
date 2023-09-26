@@ -8,7 +8,7 @@
 "start": "node src/index.js"
   "start:prod": "npm run build && node ./dist/src/index.js",
   "start:nodemon": "./node_modules/nodemon/bin/nodemon.js",
-  "build": "npm i && tsc --build",
+  "build": "npm i && npx tsc",
  },
  "dependencies": {
   "@neondatabase/serverless": "^0.6.0",
