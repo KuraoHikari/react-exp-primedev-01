@@ -18,7 +18,7 @@ export async function action({ request }: { request: Request }) {
   const formData = await request.formData();
   const payload = Object.fromEntries(formData);
 
-  const response = await baseApi.post(`auth/${payload.auth}`, {
+  const response = await baseApi.post(`auth/${payload.auth === "LOGIN" ? "login" : "register"}`, {
    headers: {
     "Content-Type": "application/json",
    },

@@ -75,7 +75,8 @@ const AuthForm = () => {
       placeholder="Password"
      />
     </div>
-    <Input className="hidden" type="text" name="auth" id="auth" value={variant === "LOGIN" ? "login" : "register"} />
+
+    <Input className="hidden" type="text" name="auth" id="auth" value={variant} />
 
     <div className="pb-2 pt-4">
      <Button

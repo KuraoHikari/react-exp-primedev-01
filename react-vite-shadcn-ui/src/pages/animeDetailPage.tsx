@@ -2,8 +2,10 @@ import baseApi from "@/api/baseApi";
 import baseJikanApi from "@/api/jikanApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { animeDetailRes, responseAnimeImages } from "@/types/responseType";
+import useBookmarksList from "@/store/useBookmarklist";
+import { animeBookmark, animeDetailRes, responseAnimeImages } from "@/types/responseType";
 import clsx from "clsx";
+import { useEffect, useState } from "react";
 import { redirect, useLoaderData, useSubmit } from "react-router-dom";
 
 interface Params {
@@ -11,48 +13,78 @@ interface Params {
 }
 
 export async function loader({ params }: any) {
- const typeParams = params as unknown as Params;
- const response = await baseJikanApi.get(`anime/${typeParams.id}`);
+ try {
+  const typeParams = params as unknown as Params;
+  const response = await baseJikanApi.get(`anime/${typeParams.id}`);
 
- if (!response.ok) {
-  console.log(response);
+  if (!response.ok) {
+   console.log(response);
+  }
+
+  const json: { data: animeDetailRes } = await response.json();
+
+  const responseImages = await baseApi.get(`animewall?title=${json.data.title}`, {
+   headers: {
+    authorization: `Bearer ${localStorage.getItem("access_token")}`,
+   },
+  });
+
+  const jsonImages: responseAnimeImages = await responseImages.json();
+
+  return { anime: json.data, animeImages: jsonImages.metaData };
+ } catch (error: any) {
+  if (error.name === "HTTPError") {
+   const errorJson = await error.response.json();
+
+   if (errorJson.status === 401) {
+    localStorage.removeItem("access_token");
+    return redirect("/auth");
+   }
+  }
+
+  return { anime: {}, animeImages: [] };
  }
-
- const json: { data: animeDetailRes } = await response.json();
-
- const responseImages = await baseApi.get(`animewall?title=${json.data.title}`, {
-  headers: {
-   authorization: `Bearer ${localStorage.getItem("access_token")}`,
-  },
- });
-
- const jsonImages: responseAnimeImages = await responseImages.json();
-
- return { anime: json.data, animeImages: jsonImages.metaData };
 }
 
 export async function action({ request, params }: { request: Request; params: any }) {
- const formData = await request.formData();
- const payload = Object.fromEntries(formData);
+ try {
+  const formData = await request.formData();
+  const payload = Object.fromEntries(formData);
 
- const response = await baseApi.post(`bookmark/${params.id}`, {
-  headers: {
-   "Content-Type": "application/json",
-   authorization: `Bearer ${localStorage.getItem("access_token")}`,
-  },
-  body: JSON.stringify(payload),
- });
- console.log("🚀 ~ file: animeDetailPage.tsx:47 ~ action ~ response:", response);
+  await baseApi.post(`bookmark/${params.id}`, {
+   headers: {
+    "Content-Type": "application/json",
+    authorization: `Bearer ${localStorage.getItem("access_token")}`,
+   },
+   body: JSON.stringify(payload),
+  });
 
- if (!response.ok) {
-  console.log(response);
+  return redirect("/bookmark");
+ } catch (error: any) {
+  if (error.name === "HTTPError") {
+   const errorJson = await error.response.json();
+
+   if (errorJson.status === 401) {
+    localStorage.removeItem("access_token");
+    return redirect("/auth");
+   }
+  }
+  return false;
  }
-
- return redirect("/bookmark");
 }
 
 const PageDetailAnime = () => {
+ const [isBookmark, setIsBookmark] = useState<animeBookmark | undefined>(undefined);
+
+ const { bookmarks } = useBookmarksList();
+
  const data = useLoaderData() as { anime: animeDetailRes; animeImages: { image: string }[] };
+
+ useEffect(() => {
+  const bookmark = bookmarks.find((bookmarkAnime) => bookmarkAnime.malId === data.anime.mal_id);
+  setIsBookmark(bookmark);
+ }, [bookmarks]);
+
  const submit = useSubmit();
  function handleSubmit(event: any) {
   event.preventDefault();
@@ -102,7 +134,7 @@ const PageDetailAnime = () => {
            type="submit"
            className=" px-4 font-semibold text-gray-100 bg-gray-900 hover:bg-gray-200 hover:text-gray-900"
           >
-           Add to Bookmark
+           {isBookmark ? "Remove from Bookmark" : "Add to Bookmark"}
           </Button>
          </form>
 
@@ -150,7 +182,10 @@ const PageDetailAnime = () => {
      <div className="wrapper pt-10">
       <div className="box-border max-w-7xl mx-4 sm:columns-1 md:columns-2 lg:columns-3 xl:columns-3">
        {data?.animeImages?.map((animeI) => (
-        <div key={animeI.image} className="break-inside bg-clip-border bg-white flex flex-col mb-4 p-6">
+        <div
+         key={animeI.image}
+         className="break-inside bg-clip-border bg-gray-500 bg-opacity-50 dark:bg-gray-200 flex flex-col mb-4 p-6"
+        >
          <div className="flex items-center justify-center">
           <img className="max-w-full " alt="Avatar" src={animeI.image} loading="lazy" />
          </div>

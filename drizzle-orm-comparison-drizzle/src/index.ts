@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000;
 
 app.use(
  cors({
-  origin: "https://tubular-kringle-358b8d.netlify.app",
+  origin: "*",
  })
 );
 app.use(express.urlencoded({ extended: true }));

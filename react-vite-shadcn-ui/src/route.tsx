@@ -4,7 +4,7 @@ import AnimePage, { action as actionAnime } from "./pages/animePage";
 import AnimeDetailPage, { loader as loaderDetail, action as actionDetail } from "./pages/animeDetailPage";
 import LandingPage from "./pages/landingPage";
 import AuthLayout, { action as actionAuth, loader as loaderAuth } from "./layout/authLayout";
-import BookmarkPage, { loader as loaderBookmark } from "./pages/bookmarkPage";
+import BookmarkPage from "./pages/bookmarkPage";
 
 export const routes = [
  {
@@ -12,6 +12,7 @@ export const routes = [
   path: "/anime",
   element: <LayoutMain />,
   loader: loaderMain,
+
   children: [
    {
     index: true,
@@ -35,7 +36,6 @@ export const routes = [
    {
     index: true,
     element: <BookmarkPage />,
-    loader: loaderBookmark,
    },
   ],
  },

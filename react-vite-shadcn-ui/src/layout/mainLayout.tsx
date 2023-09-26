@@ -1,21 +1,53 @@
-import { Link, Outlet, redirect, useLocation, useNavigation } from "react-router-dom";
+import { Link, Outlet, redirect, useLoaderData, useLocation, useNavigate, useNavigation } from "react-router-dom";
 import Container from "@/components/ui/container";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/mode-toggle";
 import { routes } from "@/route";
-import { Loader2 } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
+import { animeBookmark, responseBookmarks } from "@/types/responseType";
+import baseApi from "@/api/baseApi";
+import useBookmarksList from "@/store/useBookmarklist";
+import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
 
 export async function loader() {
  if (!localStorage.getItem("access_token")) {
   return redirect("/auth");
  }
 
- return {};
+ try {
+  const responseImages = await baseApi.get(`bookmark`, {
+   headers: {
+    authorization: `Bearer ${localStorage.getItem("access_token")}`,
+   },
+  });
+  const json: responseBookmarks = await responseImages.json();
+  return { anime: json.metaData };
+ } catch (error: any) {
+  if (error.name === "HTTPError") {
+   const errorJson = await error.response.json();
+
+   if (errorJson.status === 401) {
+    localStorage.removeItem("access_token");
+    return redirect("/auth");
+   }
+  }
+
+  return { anime: [] };
+ }
 }
 
 const LayoutMain = () => {
  const navigation = useNavigation();
- console.log("🚀 ~ file: mainLayout.tsx:17 ~ LayoutMain ~ navigation:", navigation);
+
+ const { set } = useBookmarksList();
+ const data = useLoaderData() as { anime: animeBookmark[] };
+
+ useEffect(() => {
+  if (data?.anime) {
+   set(data?.anime);
+  }
+ }, []);
  if (navigation.state === "loading") {
   return (
    <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden opacity-75 flex flex-col items-center justify-center">
@@ -28,6 +60,14 @@ const LayoutMain = () => {
   );
  }
  const location = useLocation();
+ const navigate = useNavigate();
+
+ function handleSubmit(event: any) {
+  event.preventDefault();
+  localStorage.removeItem("access_token");
+
+  navigate("/auth");
+ }
 
  return (
   <>
@@ -52,6 +92,19 @@ const LayoutMain = () => {
        ))}
       </nav>
       <div className="ml-auto flex items-center gap-x-4">
+       {localStorage.getItem("access_token") && (
+        <form
+         method="post"
+         onSubmit={(event) => {
+          handleSubmit(event);
+         }}
+        >
+         <Button type="submit" variant="outline" size="icon">
+          <LogOut className="absolute h-[1.2rem] w-[1.2rem]" />
+         </Button>
+        </form>
+       )}
+
        <ModeToggle />
       </div>
      </div>
