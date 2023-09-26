@@ -7,9 +7,9 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(
- cors({
-  origin: "*",
- })
+  cors({
+    origin: String(process.env.cors),
+  })
 );
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -25,5 +25,5 @@ app.use(router);
 app.use(errorHandler);
 
 app.listen(port, () => {
- console.log(`Server is listening on port ${port}.`);
+  console.log(`Server is listening on port ${port}.`);
 });
