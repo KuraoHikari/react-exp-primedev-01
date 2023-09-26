@@ -39,25 +39,26 @@ export async function loader() {
 
 const LayoutMain = () => {
  const [isLoading, setIsLoading] = useState<boolean>(false);
-
+ const { set } = useBookmarksList();
+ const data = useLoaderData() as { anime: animeBookmark[] };
  const navigation = useNavigation();
+ const location = useLocation();
+ const navigate = useNavigate();
 
  useEffect(() => {
-  if (navigation.state === "loading") {
+  if (navigation?.state === "loading") {
    setIsLoading(true);
   } else {
    setIsLoading(false);
   }
  }, [navigation?.state]);
 
- const { set } = useBookmarksList();
- const data = useLoaderData() as { anime: animeBookmark[] };
-
  useEffect(() => {
   if (data?.anime) {
    set(data?.anime);
   }
  }, []);
+
  if (isLoading) {
   return (
    <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden opacity-75 flex flex-col items-center justify-center">
@@ -69,8 +70,6 @@ const LayoutMain = () => {
    </div>
   );
  }
- const location = useLocation();
- const navigate = useNavigate();
 
  function handleSubmit(event: any) {
   event.preventDefault();
